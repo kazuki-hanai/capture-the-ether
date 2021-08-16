@@ -8,25 +8,19 @@ const solution = async () => {
 
     const abi = require('../../abi/choose_a_nickname.json');
 
-    const contract = new web3.eth.Contract(abi, process.env.CHOOSE_A_NICKNAME_ADDR || 'invalid');
-
-    const networkId = await web3.eth.net.getId();
+    const contract = new web3.eth.Contract(abi, process.env.CONTRACT_ADDR || 'invalid');
     const tx = contract.methods.setNickname(web3.utils.asciiToHex("CynicalCat"));
-    const gas = await tx.estimateGas({from: account.address});
-    const gasPrice = await web3.eth.getGasPrice();
-    const data = tx.encodeABI();
-    const nonce = await web3.eth.getTransactionCount(account.address);
 
     const signedTx = await web3.eth.accounts.signTransaction(
-    {
-        to: contract.options.address, 
-        data,
-        gas,
-        gasPrice,
-        nonce, 
-        chainId: networkId
-    },
-    account.privateKey
+        {
+            to: contract.options.address, 
+            data: tx.encodeABI(),
+            gas: await tx.estimateGas({from: account.address}),
+            gasPrice: await web3.eth.getGasPrice(),
+            nonce: await web3.eth.getTransactionCount(account.address), 
+            chainId: await web3.eth.net.getId()
+        },
+        account.privateKey
     );
     const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction || '');
     console.log(`Transaction hash: ${receipt.transactionHash}`);
