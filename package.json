@@ -1,0 +1,23 @@
+{
+  "name": "capture-the-ether",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ts-node": "ts-node",
+    "solc": "solcjs --abi -o abi",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "web3": "^1.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^16.6.1",
+    "solc": "^0.4.21",
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  }
+}
