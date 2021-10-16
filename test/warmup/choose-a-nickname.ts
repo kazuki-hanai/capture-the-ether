@@ -1,37 +1,18 @@
-import Web3 from 'web3';
-require('dotenv').config();
+import { ethers } from "hardhat";
+import { Contract, Signer } from "ethers";
+import { expect } from "chai";
 
-const solution = async () => {
-    const web3 = new Web3(process.env.WEB3_PROVIDER || 'invalid');
+let contract: Contract; // challenge contract
 
-    const account = web3.eth.accounts.privateKeyToAccount(process.env.ETH_ACCOUNT || 'invalid');
+before(async () => {
+  const factory = await ethers.getContractFactory("CaptureTheEther");
+  contract = factory.attach(`0x71c46Ed333C35e4E6c62D32dc7C8F00D125b4fee`);
+});
 
-    const abi = require('../../abi/choose_a_nickname.json');
+it("solves the challenge", async function () {
+  const nickname = ethers.utils.formatBytes32String(`CynicalCat`);
+  const tx = await contract.setNickname(nickname);
+  const txHash = tx && tx.hash;
+  expect(txHash).to.not.be.undefined;
+});
 
-    const contract = new web3.eth.Contract(abi, process.env.CONTRACT_ADDR || 'invalid');
-
-    const networkId = await web3.eth.net.getId();
-    const tx = contract.methods.setNickname(web3.utils.asciiToHex("CynicalCat"));
-    const gas = await tx.estimateGas({from: account.address});
-    const gasPrice = await web3.eth.getGasPrice();
-    const data = tx.encodeABI();
-    const nonce = await web3.eth.getTransactionCount(account.address);
-
-    const signedTx = await web3.eth.accounts.signTransaction(
-        {
-            to: contract.options.address, 
-            data,
-            gas,
-            gasPrice,
-            nonce, 
-            chainId: networkId
-        },
-        account.privateKey
-    );
-    const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction || '');
-    console.log(`Transaction hash: ${receipt.transactionHash}`);
-}
-
-solution()
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));

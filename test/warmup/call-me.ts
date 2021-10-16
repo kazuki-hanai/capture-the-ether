@@ -9,11 +9,6 @@ let contract: Contract;
 before(async () => {
   accounts = await ethers.getSigners();
   eoa = accounts[0];
-  // contract = new ethers.Contract(
-  //   `0x7e53cBe1AE1D8BCc1e4273ED31eb61bC4513C509`,
-  //   ``,
-  //   accounts[0]
-  // );
   const factory = await ethers.getContractFactory("CallMeChallenge");
   contract = factory.attach(`0x7e53cBe1AE1D8BCc1e4273ED31eb61bC4513C509`);
 });

@@ -25,3 +25,4 @@ contract NicknameChallenge {
         return cte.nicknameOf(player)[0] != 0;
     }
 }
+
