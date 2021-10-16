@@ -5,7 +5,9 @@ import { expect } from "chai";
 let contract: Contract; // challenge contract
 
 before(async () => {
-  const factory = await ethers.getContractFactory("GuessTheNumberChallenge");
+  const factory = await ethers.getContractFactory(
+    "GuessTheSecretNumberChallenge"
+  );
   contract = factory.attach(`0x26d106d839d2C6f083264820B485899bb6889a6a`);
 });
 
